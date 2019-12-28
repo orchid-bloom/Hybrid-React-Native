@@ -1,4 +1,4 @@
-####准备工作
+#### 准备工作
 首先，我们分别用 Xcode 与 Android Studio 快速建立一个只有首页的基本工程，工程名分别为 iOSDemo 与 AndroidDemo.
 
 这时，Android 工程就已经准备好了；而对于 iOS 工程来说，由于基本工程并不支持以组件化的方式管理项目，因此我们还需要多做一步，将其改造成使用 CocoaPods 管理的工程，也就是要在 iOSDemo 根目录下创建一个只有基本信息的 Podfile 文件：
@@ -19,7 +19,7 @@ end
 
 
 </br>
-####集成 React-Native
+#### 集成 React-Native
 
 原生工程对 React-Native 的依赖主要分为两部分：
 + 对react natvie核心库的依赖
@@ -33,7 +33,7 @@ react-native init react_demo
 
 </br>
 然后我们分别对 react_demo 进行集成
-###iOS 模块集成
+### iOS 模块集成
 
 在 iOS 平台，原生工程对 React-Native 的依赖分别是:
 
@@ -168,47 +168,7 @@ react-native bundle --entry-file index.js --platform ios --dev false --bundle-ou
 
 </br>
 </br>
-###Android 模块集成
-```
-xmlns:tools="http://schemas.android.com/tools"
-     tools:replace="android:appComponentFactory"
-        android:appComponentFactory=""
-```
 
-```
-AppCompatActivity换成 Activity
-```
 
-```
-ERROR: Command `config` unrecognized. Make sure that you have run `npm install` and that you are inside a react-native project.
 
-```
 
-Android 原生工程对 Flutter 的依赖主要分为两部分，对应到 Android 平台，这两部分分别是：
-
-+ Flutter 库和引擎，也就是 icudtl.dat、libFlutter.so，还有一些 class 文件。这些文件都封装在 Flutter.jar 中。
-+ Flutter 工程产物，主要包括应用程序数据段 isolate_snapshot_data、应用程序指令段 isolate_snapshot_instr、虚拟机数据段 vm_snapshot_data、虚拟机指令段 vm_snapshot_instr、资源文件 Flutter_assets。
-
-我们对 Android 的 Flutter 依赖进行抽取，首先我们再flutter_demo根目录，执行arr打包命令
-
-```
-Flutter build apk --debug
-```
-
-如果需要release，把 debug 换成 release 就可以构建 release 产物.
-
-打包构建的flutter-debug.arr 位于 /.android/Flutter/build/outputs/aar/目录下，我们把它拷贝到AndroidDemo的App/libs目录下，然后在build.gradle中对他添加依赖：
-
-```
- implementation(name: 'flutter-debug', ext: 'aar')
-
-```
-
-sync同步一下，然后我们修改AndroidDemo MainActivity的代码，将setContentView的加载View换成FlutterView
-
-```
-View FlutterView = Flutter.createView(this, getLifecycle(), "defaultRoute");
-setContentView(FlutterView);
-```
-
-最后点击运行， Flutter Widget 就展示出来了.
